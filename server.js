@@ -1,36 +1,32 @@
 const express = require('express');
-const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-
 const app = express();
 const PORT = 3000;
 
-// Configurar o Express para servir arquivos estáticos da pasta 'public'
-// Servir arquivos estáticos da pasta 'public'
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json({ limit: '50mb' })); // Para aceitar imagens grandes em base64
 
-// Configurar o multer para salvar as imagens enviadas
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+// Rota para receber a imagem base64
+app.post('/upload', (req, res) => {
+  const { image } = req.body;
+  if (!image) {
+    return res.status(400).send('Nenhuma imagem foi enviada.');
   }
-});
 
-const upload = multer({ storage: storage });
+  // Remover o prefixo "data:image/jpeg;base64,"
+  const base64Data = image.replace(/^data:image\/jpeg;base64,/, '');
 
-// Criar a pasta de uploads se ela não existir
-if (!fs.existsSync('./uploads')) {
-  fs.mkdirSync('./uploads');
-}
+  // Salvar a imagem em um arquivo
+  const filePath = path.join(__dirname, 'uploads', `image-${Date.now()}.jpeg`);
+  fs.writeFile(filePath, base64Data, 'base64', (err) => {
+    if (err) {
+      console.error('Erro ao salvar a imagem:', err);
+      return res.status(500).send('Erro ao salvar a imagem.');
+    }
 
-// Rota para receber e salvar a imagem
-app.post('/upload', upload.single('image'), (req, res) => {
-  res.json({ message: 'Imagem salva com sucesso!', filename: req.file.filename });
+    res.json({ message: 'Imagem salva com sucesso!', path: filePath });
+  });
 });
 
 // Iniciar o servidor

@@ -3,50 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reconhecimento Facial</title>
-  <!-- Carregar Face API.js via CDN -->
+  <title>Detecção Facial com Face API.js</title>
   <script defer src="face-api.js"></script>
   <style>
     video, canvas {
       display: block;
       margin: auto;
     }
+    #preview {
+      display: block;
+      margin: 20px auto;
+      max-width: 100%;
+      height: auto;
+    }
   </style>
 </head>
 <body>
-  <h1 style="text-align: center;">Detecção de Faces</h1>
+  <h1 style="text-align: center;">Detecção de Faces e Envio de Imagem</h1>
+
   <video id="video" width="720" height="560" autoplay muted></video>
   <canvas id="overlay" width="720" height="560"></canvas>
+  <h2 style="text-align: center;">Imagem Capturada (Base64):</h2>
+  <img id="preview" src="" alt="Imagem Capturada">
 
   <script>
-    // Esperar até que o DOM esteja carregado para garantir que face-api.js foi carregado
     document.addEventListener("DOMContentLoaded", async function () {
       if (typeof faceapi === 'undefined') {
         console.error('Face API.js não foi carregado corretamente.');
         return;
       }
 
-      console.log('Face API.js carregado com sucesso.');
-
-      // Função para carregar os modelos de reconhecimento facial
+      // Função para carregar os modelos
       async function loadModels() {
         try {
-          await faceapi.nets.tinyFaceDetector.loadFromUri('/models'); // Certifique-se de que os modelos estão em 'public/models'
+          await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
           console.log('Modelos carregados!');
         } catch (error) {
           console.error('Erro ao carregar os modelos:', error);
         }
       }
 
-      // Inicializar a câmera e carregar os modelos
       async function startVideo() {
         const video = document.getElementById('video');
         await loadModels();
 
-        // Capturar vídeo da câmera
-        navigator.mediaDevices.getUserMedia({ video: {} })
-          .then(stream => video.srcObject = stream)
-          .catch(err => console.error('Erro ao acessar a câmera:', err));
+        // Acessar a câmera
+        navigator.mediaDevices.getUserMedia({ video: true })
+          .then(stream => {
+            video.srcObject = stream;
+          })
+          .catch(err => {
+            console.error('Erro ao acessar a câmera:', err);
+          });
+      }
+
+      // Captura a imagem do vídeo, converte para base64 e exibe
+      async function captureFrameAsBase64(video) {
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const context = canvas.getContext('2d');
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // Converter o frame para base64
+        const imageBase64 = canvas.toDataURL('image/jpeg');
+        
+        // Exibir a imagem capturada
+        document.getElementById('preview').src = imageBase64;
+
+        return imageBase64;
       }
 
       // Detectar rostos em tempo real
@@ -57,49 +82,45 @@
 
         faceapi.matchDimensions(overlay, displaySize);
 
-        // Processar frames de vídeo
         setInterval(async () => {
           const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions());
           const resizedDetections = faceapi.resizeResults(detections, displaySize);
           const context = overlay.getContext('2d');
           context.clearRect(0, 0, overlay.width, overlay.height);
 
-          // Desenhar caixas ao redor das faces detectadas
+          // Desenhar as detecções no canvas
           faceapi.draw.drawDetections(overlay, resizedDetections);
 
-          // Se detectar um rosto, salvar a imagem
+          // Se detectar um rosto, captura o frame como base64
           if (detections.length > 0) {
-            console.log('Rosto detectado, salvando...');
-            saveFace(video);
+            console.log('Rosto detectado, capturando frame...');
+            const imageBase64 = await captureFrameAsBase64(video);
+
+            // Aqui você pode enviar a imagem para o servidor, se necessário
+            // await sendImageToServer(imageBase64);
           }
         }, 1000);
       }
 
-      // Função para capturar e salvar a imagem do vídeo
-      async function saveFace(video) {
-        const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const context = canvas.getContext('2d');
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      // Função para enviar a imagem em base64 para o servidor
+      async function sendImageToServer(imageBase64) {
+        try {
+          const response = await fetch('/upload', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ image: imageBase64 })
+          });
 
-        // Converter a imagem para um blob
-        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg'));
-
-        // Enviar a imagem para o servidor
-        const formData = new FormData();
-        formData.append('image', blob, 'face.jpg');
-
-        fetch('http://localhost:3000/upload', {
-          method: 'POST',
-          body: formData,
-        })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(err => console.error('Erro ao enviar a imagem:', err));
+          const result = await response.json();
+          console.log('Imagem enviada com sucesso:', result);
+        } catch (err) {
+          console.error('Erro ao enviar a imagem:', err);
+        }
       }
 
-      // Iniciar a captura de vídeo e a detecção de faces
+      // Iniciar o vídeo e detecção de faces
       startVideo().then(detectFaces);
     });
   </script>

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "MhMmBhAjTko=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\FaceApiApp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\lukka\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

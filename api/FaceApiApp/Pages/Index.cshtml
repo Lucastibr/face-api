@@ -1,0 +1,29 @@
+﻿@page
+@model IndexModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<h2>Detecções Faciais</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Gênero</th>
+        <th>Idade</th>
+        <th>Imagem</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var detection in Model.Detections)
+    {
+        <tr>
+            <td>@detection.Id</td>
+            <td>@detection.Gender</td>
+            <td>@detection.Age</td>
+            <td>
+                <img src="data:image/png;base64,@detection.ImageBase64" alt="Imagem de Detecção" width="100" height="100" />
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

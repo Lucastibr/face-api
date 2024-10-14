@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 
 namespace FaceApiApp.Controllers;
 
@@ -6,16 +7,39 @@ namespace FaceApiApp.Controllers;
 [ApiController]
 public class DetectionsController : ControllerBase
 {
-    private static List<Detection> detections = new List<Detection>
+    private readonly DetectionService _detectionService;
+
+    public DetectionsController(DetectionService detectionService)
     {
-        new Detection { Id = 1, ImageBase64 = "image1", Gender = "male", Age = 25 },
-        new Detection { Id = 2, ImageBase64 = "image2", Gender = "female", Age = 30 }
-    };
+        _detectionService = detectionService;
+    }
+
+    // POST: api/detections
+    [HttpPost]
+    public async Task<IActionResult> CreateDetection([FromBody] Detection detection)
+    {
+        if (detection == null)
+        {
+            return BadRequest();
+        }
+
+            // Gera um novo Id se o Id não for fornecido
+        if (string.IsNullOrEmpty(detection.Id))
+        {
+            detection.Id = ObjectId.GenerateNewId().ToString(); // Gera um novo ObjectId
+        }
+
+
+        detection.Date = DateTime.Now;  // Adiciona a data da detecção
+        await _detectionService.CreateDetectionAsync(detection);
+
+        return Ok(detection);
+    }
 
     // GET: api/detections
     [HttpGet]
-    public ActionResult<List<Detection>> Get()
+    public async Task<List<Detection>> GetDetections()
     {
-        return Ok(detections);
+        return await _detectionService.GetDetectionsAsync();
     }
 }

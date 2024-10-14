@@ -10,7 +10,7 @@ public class IndexModel : PageModel
 
     public List<Detection> Detections { get; set; } = new List<Detection>();
 
-    // Injeção do HttpClient nomeado "ApiClient"
+    // Injeï¿½ï¿½o do HttpClient nomeado "ApiClient"
     public IndexModel(IHttpClientFactory httpClientFactory)
     {
         _httpClient = httpClientFactory.CreateClient("ApiClient");
@@ -18,7 +18,7 @@ public class IndexModel : PageModel
 
     public async Task OnGetAsync()
     {
-        // Fazendo a requisição para a API usando URI relativa
+        // Fazendo a requisiï¿½ï¿½o para a API usando URI relativa
         var response = await _httpClient.GetAsync("api/detections");
 
         if (response.IsSuccessStatusCode)

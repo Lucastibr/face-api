@@ -367,3 +367,16 @@ C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\bin\Debug\net8
 C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.CSharp.resources.dll
 C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
 C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\obj\Debug\net8.0\FaceApiApp.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\bin\Debug\net8.0\AWSSDK.Core.dll
+C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\bin\Debug\net8.0\AWSSDK.SecurityToken.dll
+C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\bin\Debug\net8.0\DnsClient.dll
+C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\bin\Debug\net8.0\MongoDB.Bson.dll
+C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\bin\Debug\net8.0\MongoDB.Driver.dll
+C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\bin\Debug\net8.0\MongoDB.Driver.Core.dll
+C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\bin\Debug\net8.0\MongoDB.Libmongocrypt.dll
+C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\bin\Debug\net8.0\SharpCompress.dll
+C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\bin\Debug\net8.0\Snappier.dll
+C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\bin\Debug\net8.0\ZstdSharp.dll
+C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\bin\Debug\net8.0\runtimes\linux\native\libmongocrypt.so
+C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\bin\Debug\net8.0\runtimes\osx\native\libmongocrypt.dylib
+C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\bin\Debug\net8.0\runtimes\win\native\mongocrypt.dll

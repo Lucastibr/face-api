@@ -13,7 +13,8 @@
     <title>Detecção Facial com Face API.js</title>
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        asp-append-version="true">
 
     <style>
         #video,
@@ -75,7 +76,8 @@
                         <h1>Detecção de Faces e Envio de Imagem</h1>
                     </div>
                     <div class="card-body text-center">
-                        <video id="video" class="rounded mb-3 shadow-sm" width="720" height="560" autoplay muted></video>
+                        <video id="video" class="rounded mb-3 shadow-sm" width="720" height="560" autoplay
+                            muted></video>
                         <canvas id="overlay" class="rounded shadow-sm" width="720" height="560"></canvas>
                     </div>
                 </div>
@@ -88,7 +90,8 @@
     </div>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        asp-append-version="true"></script>
 
     <!-- Face API JS -->
     <script defer src="@Url.Content("js/faceapi.js")" asp-append-version="true"></script>
@@ -103,7 +106,7 @@
             // Função para carregar os modelos
             async function loadModels() {
                 try {
-              await faceapi.nets.tinyFaceDetector.loadFromUri("js/models");
+                    await faceapi.nets.tinyFaceDetector.loadFromUri("js/models");
 
                     await faceapi.nets.ageGenderNet.loadFromUri("js/models");
                     console.log('Modelos carregados!');
@@ -206,21 +209,27 @@
                 document.body.appendChild(popup);
             }
 
-            async function sendImageToServer(imageBase64) {
+            async function sendImageToServer(imageBase64, gender, age) {
                 try {
-                    const response = await fetch('@Url.Page("/upload")', {
+                    const response = await fetch('/api/detections', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ image: imageBase64 })
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            ImageBase64: imageBase64,
+                            Gender: gender,
+                            Age: age
+                        })
                     });
 
                     const result = await response.json();
-                    console.log('Imagem enviada com sucesso:', result);
+                    console.log('Dados enviados com sucesso:', result);
                 } catch (err) {
-                    console.error('Erro ao enviar a imagem:', err);
+                    console.error('Erro ao enviar os dados:', err);
                 }
             }
-
+            
             startVideo().then(detectFaces);
         });
     </script>

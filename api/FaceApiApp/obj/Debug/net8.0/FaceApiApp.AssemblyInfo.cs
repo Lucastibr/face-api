@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FaceApiApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9e7f551377af734ab7ca86f38104361dbea9eb82")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1176570938a61ff7f169d349e0e0ebcb56580aa4")]
 [assembly: System.Reflection.AssemblyProductAttribute("FaceApiApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FaceApiApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

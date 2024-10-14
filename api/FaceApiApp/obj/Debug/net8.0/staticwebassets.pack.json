@@ -13,6 +13,82 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\faceapi.js",
+      "PackagePath": "staticwebassets\\js\\faceapi.js"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\age_gender_model-shard1",
+      "PackagePath": "staticwebassets\\js\\models"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\age_gender_model-weights_manifest.json",
+      "PackagePath": "staticwebassets\\js\\models\\age_gender_model-weights_manifest.json"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\face_expression_model-shard1",
+      "PackagePath": "staticwebassets\\js\\models"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\face_expression_model-weights_manifest.json",
+      "PackagePath": "staticwebassets\\js\\models\\face_expression_model-weights_manifest.json"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\face_landmark_68_model-shard1",
+      "PackagePath": "staticwebassets\\js\\models"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\face_landmark_68_model-weights_manifest.json",
+      "PackagePath": "staticwebassets\\js\\models\\face_landmark_68_model-weights_manifest.json"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\face_landmark_68_tiny_model-shard1",
+      "PackagePath": "staticwebassets\\js\\models"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\face_landmark_68_tiny_model-weights_manifest.json",
+      "PackagePath": "staticwebassets\\js\\models\\face_landmark_68_tiny_model-weights_manifest.json"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\face_recognition_model-shard1",
+      "PackagePath": "staticwebassets\\js\\models"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\face_recognition_model-shard2",
+      "PackagePath": "staticwebassets\\js\\models"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\face_recognition_model-weights_manifest.json",
+      "PackagePath": "staticwebassets\\js\\models\\face_recognition_model-weights_manifest.json"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\mtcnn_model-shard1",
+      "PackagePath": "staticwebassets\\js\\models"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\mtcnn_model-weights_manifest.json",
+      "PackagePath": "staticwebassets\\js\\models\\mtcnn_model-weights_manifest.json"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\ssd_mobilenetv1_model-shard1",
+      "PackagePath": "staticwebassets\\js\\models"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\ssd_mobilenetv1_model-shard2",
+      "PackagePath": "staticwebassets\\js\\models"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\ssd_mobilenetv1_model-weights_manifest.json",
+      "PackagePath": "staticwebassets\\js\\models\\ssd_mobilenetv1_model-weights_manifest.json"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\tiny_face_detector_model-shard1",
+      "PackagePath": "staticwebassets\\js\\models"
+    },
+    {
+      "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\models\\tiny_face_detector_model-weights_manifest.json",
+      "PackagePath": "staticwebassets\\js\\models\\tiny_face_detector_model-weights_manifest.json"
+    },
+    {
       "Id": "C:\\Users\\lukka\\OneDrive\\Área de Trabalho\\face-api\\api\\FaceApiApp\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

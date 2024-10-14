@@ -14,9 +14,13 @@ build_property.EnableComHosting =
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
-build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = true
 build_property.MSBuildProjectDirectory = C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp
 build_property._RazorSourceGeneratorDebug = 
+
+[C:/Users/lukka/OneDrive/Área de Trabalho/face-api/api/FaceApiApp/Pages/Capture.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2FwdHVyZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/lukka/OneDrive/Área de Trabalho/face-api/api/FaceApiApp/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s

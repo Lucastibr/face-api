@@ -1,0 +1,229 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Detecção Facial com Face API.js";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detecção Facial com Face API.js</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true">
+
+    <style>
+        #video,
+        #overlay {
+            display: block;
+            margin: 0 auto;
+        }
+
+        #preview {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .card-video {
+            background-color: #f8f9fa;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        h1,
+        h2 {
+            text-align: center;
+        }
+
+        .btn-custom {
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 50px;
+        }
+
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+
+        #overlay {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Card para a Detecção de Faces -->
+                <div class="card card-video">
+                    <div class="card-header text-center">
+                        <h1>Detecção de Faces e Envio de Imagem</h1>
+                    </div>
+                    <div class="card-body text-center">
+                        <video id="video" class="rounded mb-3 shadow-sm" width="720" height="560" autoplay muted></video>
+                        <canvas id="overlay" class="rounded shadow-sm" width="720" height="560"></canvas>
+                    </div>
+                </div>
+
+                <!-- Imagem Capturada -->
+                <h2 class="mt-5">Imagem Capturada (Base64):</h2>
+                <img id="preview" class="rounded shadow-sm img-fluid" src="" alt="Imagem Capturada">
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+
+    <!-- Face API JS -->
+    <script defer src="@Url.Content("js/faceapi.js")" asp-append-version="true"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            if (typeof faceapi === 'undefined') {
+                console.error('Face API.js não foi carregado corretamente.');
+                return;
+            }
+
+            // Função para carregar os modelos
+            async function loadModels() {
+                try {
+              await faceapi.nets.tinyFaceDetector.loadFromUri("js/models");
+
+                    await faceapi.nets.ageGenderNet.loadFromUri("js/models");
+                    console.log('Modelos carregados!');
+                } catch (error) {
+                    console.error('Erro ao carregar os modelos:', error);
+                }
+            }
+
+            // Variável para armazenar as detecções anteriores
+            let previousDetections = [];
+
+            async function startVideo() {
+                const video = document.getElementById('video');
+                await loadModels();
+
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        video.srcObject = stream;
+                    })
+                    .catch(err => {
+                        console.error('Erro ao acessar a câmera:', err);
+                    });
+            }
+
+            // Função para verificar se um rosto já foi detectado anteriormente
+            function isSameFace(detection, previousDetections) {
+                return previousDetections.some(prevDetection => {
+                    const distanceX = Math.abs(detection.detection.box.x - prevDetection.detection.box.x);
+                    const distanceY = Math.abs(detection.detection.box.y - prevDetection.detection.box.y);
+                    const tolerance = 50;
+                    return distanceX < tolerance && distanceY < tolerance;
+                });
+            }
+
+            async function detectFaces() {
+                const video = document.getElementById('video');
+                const overlay = document.getElementById('overlay');
+                const displaySize = { width: video.width, height: video.height };
+
+                faceapi.matchDimensions(overlay, displaySize);
+
+                setInterval(async () => {
+                    const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withAgeAndGender();
+                    const resizedDetections = faceapi.resizeResults(detections, displaySize);
+                    const context = overlay.getContext('2d');
+                    context.clearRect(0, 0, overlay.width, overlay.height);
+
+                    const newDetections = resizedDetections.filter(detection => !isSameFace(detection, previousDetections));
+                    faceapi.draw.drawDetections(overlay, newDetections, { withScore: false });
+
+                    clearPopups();
+
+                    previousDetections = resizedDetections;
+
+                    resizedDetections.forEach(detection => {
+                        createPopup(detection, displaySize);
+                    });
+
+                    if (newDetections.length > 0) {
+                        console.log('Rosto novo detectado, capturando frame...');
+                        const imageBase64 = await captureFrameAsBase64(video);
+                    }
+                }, 1000);
+            }
+
+            async function captureFrameAsBase64(video) {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const context = canvas.getContext('2d');
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                const imageBase64 = canvas.toDataURL('image/jpeg');
+                document.getElementById('preview').src = imageBase64;
+
+                return imageBase64;
+            }
+
+            function clearPopups() {
+                const popups = document.querySelectorAll('.popup');
+                popups.forEach(popup => popup.remove());
+            }
+
+            function createPopup(detection, displaySize) {
+                const { age, gender, genderProbability } = detection;
+                const box = detection.detection.box;
+
+                const popup = document.createElement('div');
+                popup.className = 'popup';
+                popup.style.position = 'absolute';
+                popup.style.left = `${box.x}px`;
+                popup.style.top = `${box.y - 30}px`;
+                popup.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+                popup.style.color = 'white';
+                popup.style.padding = '5px';
+                popup.style.borderRadius = '5px';
+                popup.style.zIndex = '10';
+
+                popup.innerHTML = `<strong>${gender}</strong> (${Math.round(genderProbability * 100)}%)<br> Idade: ${Math.round(age)}`;
+                document.body.appendChild(popup);
+            }
+
+            async function sendImageToServer(imageBase64) {
+                try {
+                    const response = await fetch('@Url.Page("/upload")', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ image: imageBase64 })
+                    });
+
+                    const result = await response.json();
+                    console.log('Imagem enviada com sucesso:', result);
+                } catch (err) {
+                    console.error('Erro ao enviar a imagem:', err);
+                }
+            }
+
+            startVideo().then(detectFaces);
+        });
+    </script>
+</body>
+
+</html>

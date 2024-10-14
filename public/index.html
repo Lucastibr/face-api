@@ -53,8 +53,8 @@
     }
 
     #overlay {
-  display: none;
-}
+      display: none;
+    }
   </style>
 </head>
 
@@ -77,11 +77,6 @@
         <!-- Imagem Capturada -->
         <h2 class="mt-5">Imagem Capturada (Base64):</h2>
         <img id="preview" class="rounded shadow-sm img-fluid" src="" alt="Imagem Capturada">
-
-        <!-- Botão de Captura -->
-        <div class="text-center mt-4">
-          <button class="btn btn-lg btn-custom">Capturar Imagem</button>
-        </div>
       </div>
     </div>
   </div>
@@ -94,48 +89,49 @@
       if (typeof faceapi === 'undefined') {
         console.error('Face API.js não foi carregado corretamente.');
         return;
-    }
+      }
 
-    // Função para carregar os modelos
-    async function loadModels() {
+      // Função para carregar os modelos
+      async function loadModels() {
         try {
-            await faceapi.nets.tinyFaceDetector.loadFromUri('./models');
-            console.log('Modelos carregados!');
+          await faceapi.nets.tinyFaceDetector.loadFromUri('./models');
+          await faceapi.nets.ageGenderNet.loadFromUri('./models');
+          console.log('Modelos carregados!');
         } catch (error) {
-            console.error('Erro ao carregar os modelos:', error);
+          console.error('Erro ao carregar os modelos:', error);
         }
-    }
+      }
 
-    // Variável para armazenar as detecções anteriores
-    let previousDetections = [];
+      // Variável para armazenar as detecções anteriores
+      let previousDetections = [];
 
-    async function startVideo() {
+      async function startVideo() {
         const video = document.getElementById('video');
         await loadModels();
 
         navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                video.srcObject = stream;
-            })
-            .catch(err => {
-                console.error('Erro ao acessar a câmera:', err);
-            });
-    }
+          .then(stream => {
+            video.srcObject = stream;
+          })
+          .catch(err => {
+            console.error('Erro ao acessar a câmera:', err);
+          });
+      }
 
-    // Função para verificar se um rosto já foi detectado anteriormente
-    function isSameFace(detection, previousDetections) {
+      // Função para verificar se um rosto já foi detectado anteriormente
+      function isSameFace(detection, previousDetections) {
         return previousDetections.some(prevDetection => {
-            // Define uma tolerância para verificar se as coordenadas são próximas
-            const distanceX = Math.abs(detection.box.x - prevDetection.box.x);
-            const distanceY = Math.abs(detection.box.y - prevDetection.box.y);
-            const tolerance = 50;  // Aumente/diminua esse valor para ajustar a sensibilidade
+          // Define uma tolerância para verificar se as coordenadas são próximas
+          const distanceX = Math.abs(detection.detection.box.x - prevDetection.detection.box.x);
+          const distanceY = Math.abs(detection.detection.box.y - prevDetection.detection.box.y);
+          const tolerance = 50;  // Aumente/diminua esse valor para ajustar a sensibilidade
 
-            return distanceX < tolerance && distanceY < tolerance;
+          return distanceX < tolerance && distanceY < tolerance;
         });
-    }
+      }
 
-    // Detectar rostos em tempo real
-    async function detectFaces() {
+      // Detectar rostos em tempo real
+      async function detectFaces() {
         const video = document.getElementById('video');
         const overlay = document.getElementById('overlay');
         const displaySize = { width: video.width, height: video.height };
@@ -143,29 +139,35 @@
         faceapi.matchDimensions(overlay, displaySize);
 
         setInterval(async () => {
-            const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions());
-            const resizedDetections = faceapi.resizeResults(detections, displaySize);
-            const context = overlay.getContext('2d');
-            context.clearRect(0, 0, overlay.width, overlay.height);
+          const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withAgeAndGender();
+          const resizedDetections = faceapi.resizeResults(detections, displaySize);
+          const context = overlay.getContext('2d');
+          context.clearRect(0, 0, overlay.width, overlay.height);
 
-            // Filtra rostos que já foram detectados anteriormente
-            const newDetections = resizedDetections.filter(detection => !isSameFace(detection, previousDetections));
+          // Filtrar rostos que já foram detectados anteriormente
+          const newDetections = resizedDetections.filter(detection => !isSameFace(detection, previousDetections));
 
-            // Desenhar apenas novos rostos no canvas
-            faceapi.draw.drawDetections(overlay, newDetections, { withScore: false });
+          // Desenhar apenas novos rostos no canvas
+          faceapi.draw.drawDetections(overlay, newDetections, { withScore: false });
 
-            // Atualiza a lista de detecções anteriores
-            previousDetections = resizedDetections;
+          clearPopups();
 
-            // Se detectar um rosto novo, captura o frame como base64
-            if (newDetections.length > 0) {
-                console.log('Rosto novo detectado, capturando frame...');
-                const imageBase64 = await captureFrameAsBase64(video);
-            }
+          // Atualiza a lista de detecções anteriores
+          previousDetections = resizedDetections;
+
+          resizedDetections.forEach(detection => {
+                createPopup(detection, displaySize);
+            });
+
+          // Se detectar um rosto novo, captura o frame como base64
+          if (newDetections.length > 0) {
+            console.log('Rosto novo detectado, capturando frame...');
+            const imageBase64 = await captureFrameAsBase64(video);
+          }
         }, 1000);
-    }
+      }
 
-    async function captureFrameAsBase64(video) {
+      async function captureFrameAsBase64(video) {
         const canvas = document.createElement('canvas');
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
@@ -176,6 +178,38 @@
         document.getElementById('preview').src = imageBase64;
 
         return imageBase64;
+      }
+
+       // Função para remover popups antigos
+    function clearPopups() {
+        const popups = document.querySelectorAll('.popup');
+        popups.forEach(popup => popup.remove());
+    }
+
+    // Função para criar e exibir popups com gênero e idade
+    function createPopup(detection, displaySize) {
+        const { age, gender, genderProbability } = detection;
+        const box = detection.detection.box;
+
+        // Criar a div do popup
+        const popup = document.createElement('div');
+        popup.className = 'popup';
+        popup.style.position = 'absolute';
+        popup.style.left = `${box.x}px`;
+        popup.style.top = `${box.y - 30}px`; // Um pouco acima da caixa do rosto
+        popup.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        popup.style.color = 'white';
+        popup.style.padding = '5px';
+        popup.style.borderRadius = '5px';
+        popup.style.zIndex = '10';
+
+        // Adicionar informações de gênero e idade
+        popup.innerHTML = `
+          <strong>${gender}</strong> (${Math.round(genderProbability * 100)}%)<br>
+          Idade: ${Math.round(age)}`;
+
+        // Adicionar a div popup à tela
+        document.body.appendChild(popup);
     }
 
       async function sendImageToServer(imageBase64) {

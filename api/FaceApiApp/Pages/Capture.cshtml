@@ -168,6 +168,11 @@
                     if (newDetections.length > 0) {
                         console.log('Rosto novo detectado, capturando frame...');
                         const imageBase64 = await captureFrameAsBase64(video);
+
+                         // Obtém o primeiro rosto detectado e seus dados de gênero e idade
+            const { gender, age } = resizedDetections[0];
+
+            sendImageToServer(imageBase64, gender, Math.round(age));
                     }
                 }, 1000);
             }

@@ -34,10 +34,10 @@ public class DetectionsController : ControllerBase
         }
 
 
-        detection.Date = DateTime.Now;  // Adiciona a data da detecção
+        detection.DetectionTime = DateTime.Now;  // Adiciona a data da detecção
         await _detectionService.CreateDetectionAsync(detection);
 
-        await _hubContext.Clients.All.SendAsync("ReceiveDetectionUpdate", detection.Gender, detection.Age, detection.ImageBase64);
+        await _hubContext.Clients.All.SendAsync("ReceiveDetectionUpdate", detection.Gender, detection.Age, detection.ImageBase64, detection.MainExpression);
 
         return Ok(detection);
     }

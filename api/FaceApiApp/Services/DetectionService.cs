@@ -17,7 +17,7 @@ public class DetectionService
     {
         return await _detections
             .Find(detection => true)
-            .SortByDescending(d => d.Date) 
+            .SortByDescending(d => d.DetectionTime) 
             .Limit(5)   
             .ToListAsync();
     }

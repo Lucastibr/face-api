@@ -11,5 +11,11 @@ public class Detection
     public string ImageBase64 { get; set; }  // Imagem capturada em base64
     public string Gender { get; set; }       // Gênero detectado
     public int Age { get; set; }             // Idade estimada
-    public DateTime Date { get; set; }       // Data da detecção
+    public DateTime DetectionTime { get; set; }
+
+    // Nova propriedade para armazenar a expressão principal
+    public string MainExpression { get; set; }
+
+    // Propriedade para armazenar todas as probabilidades das expressões
+    public Dictionary<string, double> Expressions { get; set; } = new Dictionary<string, double>();   // Data da detecção
 }

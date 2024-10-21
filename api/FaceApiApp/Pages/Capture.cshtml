@@ -109,6 +109,8 @@
                     await faceapi.nets.tinyFaceDetector.loadFromUri("js/models");
 
                     await faceapi.nets.ageGenderNet.loadFromUri("js/models");
+                     await faceapi.nets.faceExpressionNet.loadFromUri('js/models'); 
+
                     console.log('Modelos carregados!');
                 } catch (error) {
                     console.error('Erro ao carregar os modelos:', error);
@@ -149,30 +151,28 @@
                 faceapi.matchDimensions(overlay, displaySize);
 
                 setInterval(async () => {
-                    const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withAgeAndGender();
+                    const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+                        .withAgeAndGender()
+                        .withFaceExpressions();  // Adicionando a detecção de expressões
+
                     const resizedDetections = faceapi.resizeResults(detections, displaySize);
                     const context = overlay.getContext('2d');
                     context.clearRect(0, 0, overlay.width, overlay.height);
 
-                    const newDetections = resizedDetections.filter(detection => !isSameFace(detection, previousDetections));
-                    faceapi.draw.drawDetections(overlay, newDetections, { withScore: false });
+                    // Desenhar os rostos detectados no canvas
+                    faceapi.draw.drawDetections(overlay, resizedDetections);
 
-                    clearPopups();
+                    for (const detection of resizedDetections) {
+                        const { age, gender, genderProbability, expressions } = detection;
 
-                    previousDetections = resizedDetections;
+                        // Encontrar a expressão com a maior probabilidade
+                        const mainExpression = Object.keys(expressions).reduce((a, b) =>
+                            expressions[a] > expressions[b] ? a : b
+                        );
 
-                    resizedDetections.forEach(detection => {
-                        createPopup(detection, displaySize);
-                    });
-
-                    if (newDetections.length > 0) {
-                        console.log('Rosto novo detectado, capturando frame...');
+                        // Enviar os dados para o servidor
                         const imageBase64 = await captureFrameAsBase64(video);
-
-                         // Obtém o primeiro rosto detectado e seus dados de gênero e idade
-            const { gender, age } = resizedDetections[0];
-
-            sendImageToServer(imageBase64, gender, Math.round(age));
+                        await sendImageToServer(gender, genderProbability, Math.round(age), imageBase64, mainExpression, expressions);
                     }
                 }, 1000);
             }
@@ -214,7 +214,8 @@
                 document.body.appendChild(popup);
             }
 
-            async function sendImageToServer(imageBase64, gender, age) {
+            // Enviar a imagem e as informações detectadas para o servidor
+            async function sendImageToServer(gender, genderConfidence, age, imageBase64, mainExpression, expressions) {
                 try {
                     const response = await fetch('/api/detections', {
                         method: 'POST',
@@ -222,9 +223,12 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            ImageBase64: imageBase64,
-                            Gender: gender,
-                            Age: age
+                            gender: gender,
+                            genderConfidence: genderConfidence,
+                            age: age,
+                            imageBase64: imageBase64,
+                            mainExpression: mainExpression,  // Enviar a expressão predominante
+                            expressions: expressions          // Enviar todas as expressões (opcional)
                         })
                     });
 

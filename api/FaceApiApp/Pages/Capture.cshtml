@@ -143,6 +143,7 @@
                 });
             }
 
+            // Função para detectar rostos em tempo real
             async function detectFaces() {
                 const video = document.getElementById('video');
                 const overlay = document.getElementById('overlay');
@@ -159,10 +160,17 @@
                     const context = overlay.getContext('2d');
                     context.clearRect(0, 0, overlay.width, overlay.height);
 
-                    // Desenhar os rostos detectados no canvas
-                    faceapi.draw.drawDetections(overlay, resizedDetections);
+                    // Filtrar rostos que já foram detectados anteriormente
+                    const newDetections = resizedDetections.filter(detection => !isSameFace(detection, previousDetections));
 
-                    for (const detection of resizedDetections) {
+                    // Desenhar apenas novos rostos no canvas
+                    faceapi.draw.drawDetections(overlay, newDetections);
+
+                    // Atualiza a lista de detecções anteriores
+                    previousDetections = resizedDetections;
+
+                    // Para cada nova detecção, capturar a imagem e enviar ao servidor
+                    for (const detection of newDetections) {
                         const { age, gender, genderProbability, expressions } = detection;
 
                         // Encontrar a expressão com a maior probabilidade
@@ -170,8 +178,10 @@
                             expressions[a] > expressions[b] ? a : b
                         );
 
-                        // Enviar os dados para o servidor
+                        // Capturar o frame como base64
                         const imageBase64 = await captureFrameAsBase64(video);
+
+                        // Enviar a detecção ao servidor via SignalR
                         await sendImageToServer(gender, genderProbability, Math.round(age), imageBase64, mainExpression, expressions);
                     }
                 }, 1000);

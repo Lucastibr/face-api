@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\Lucas\\Desktop\\face-api\\face-api\\api\\FaceApiApp\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{9E9A00A5-2FD1-4154-8FB4-B424CD54992A}|FaceApiApp.csproj|c:\\users\\lucas\\desktop\\face-api\\face-api\\api\\faceapiapp\\controllers\\detectioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E9A00A5-2FD1-4154-8FB4-B424CD54992A}|FaceApiApp.csproj|solutionrelative:controllers\\detectioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9E9A00A5-2FD1-4154-8FB4-B424CD54992A}|FaceApiApp.csproj|c:\\users\\lucas\\desktop\\face-api\\face-api\\api\\faceapiapp\\services\\detectionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9E9A00A5-2FD1-4154-8FB4-B424CD54992A}|FaceApiApp.csproj|solutionrelative:services\\detectionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{9E9A00A5-2FD1-4154-8FB4-B424CD54992A}|FaceApiApp.csproj|c:\\users\\lucas\\desktop\\face-api\\face-api\\api\\faceapiapp\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{9E9A00A5-2FD1-4154-8FB4-B424CD54992A}|FaceApiApp.csproj|solutionrelative:pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
@@ -14,17 +22,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 16,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\Lucas\\Desktop\\face-api\\face-api\\api\\FaceApiApp\\Pages\\Index.cshtml",
               "RelativeDocumentMoniker": "Pages\\Index.cshtml",
               "ToolTip": "C:\\Users\\Lucas\\Desktop\\face-api\\face-api\\api\\FaceApiApp\\Pages\\Index.cshtml",
               "RelativeToolTip": "Pages\\Index.cshtml",
-              "ViewState": "AgIAAGMAAAAAAAAAAAAmwHwAAAAkAAAAAAAAAA==",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAAwFUAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-10-21T21:41:46.813Z",
               "IsPinned": true,
@@ -85,6 +93,32 @@
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DetectionService.cs",
+              "DocumentMoniker": "C:\\Users\\Lucas\\Desktop\\face-api\\face-api\\api\\FaceApiApp\\Services\\DetectionService.cs",
+              "RelativeDocumentMoniker": "Services\\DetectionService.cs",
+              "ToolTip": "C:\\Users\\Lucas\\Desktop\\face-api\\face-api\\api\\FaceApiApp\\Services\\DetectionService.cs",
+              "RelativeToolTip": "Services\\DetectionService.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAowBgAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-21T22:45:56.797Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DetectionController.cs",
+              "DocumentMoniker": "C:\\Users\\Lucas\\Desktop\\face-api\\face-api\\api\\FaceApiApp\\Controllers\\DetectionController.cs",
+              "RelativeDocumentMoniker": "Controllers\\DetectionController.cs",
+              "ToolTip": "C:\\Users\\Lucas\\Desktop\\face-api\\face-api\\api\\FaceApiApp\\Controllers\\DetectionController.cs",
+              "RelativeToolTip": "Controllers\\DetectionController.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAywDQAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-21T22:45:48.265Z",
+              "EditorCaption": ""
             }
           ]
         }

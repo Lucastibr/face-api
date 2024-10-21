@@ -48,4 +48,11 @@ public class DetectionsController : ControllerBase
     {
         return await _detectionService.GetDetectionsAsync();
     }
+
+    // GET: api/detections
+    [HttpGet("chart")]
+    public async Task<List<Detection>> GetDetectionsChart()
+    {
+        return await _detectionService.GetDetectionsChart();
+    }
 }

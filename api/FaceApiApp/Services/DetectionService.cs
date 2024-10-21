@@ -22,6 +22,13 @@ public class DetectionService
             .ToListAsync();
     }
 
+    public async Task<List<Detection>> GetDetectionsChart()
+    {
+        return await _detections
+            .Find(detection => true)
+            .ToListAsync();
+    }
+
 
     public async Task CreateDetectionAsync(Detection detection)
     {

@@ -2,9 +2,6 @@
 @model IndexModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-@{
-
-}
 <div class="container mt-4">
     <h2>Detecções Faciais</h2>
 
@@ -15,7 +12,6 @@
                 <thead>
                     <tr>
                         <th>Gênero</th>
-                        <th>Confiança de Gênero</th>
                         <th>Idade</th>
                         <th>Expressão Principal</th>
                         <th>Imagem</th>
@@ -57,8 +53,7 @@
                                 }
                             </td>
                             <td>
-                                <img src="@detection.ImageBase64" alt="Imagem de Detecção" width="100" height="100"
-                                    class="rounded" />
+                                <img src="@detection.ImageBase64" alt="Imagem de Detecção" width="100" height="100" class="rounded" />
                             </td>
                         </tr>
                     }
@@ -66,102 +61,149 @@
             </table>
         </div>
 
-        <!-- Coluna para o gráfico -->
+        <!-- Coluna para os gráficos -->
         <div class="col-md-4">
-            <h4>Distribuição de Gêneros</h4>
-            <canvas id="genderChart" width="400" height="400"></canvas>
+            <div class="row">
+                <div class="col-md-12">
+                    <h4>Distribuição de Gêneros</h4>
+                    <canvas id="genderChart" width="400" height="200"></canvas>
+                </div>
+                <div class="col-md-12 mt-4">
+                    <h4>Distribuição de Sentimentos</h4>
+                    <canvas id="sentimentChart" width="400" height="200"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<script src="js/chart.js"></script>
-<script src="js/signalr.min.js"></script>
+
+<!-- Importar o Chart.js e SignalR -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"></script>
 
 <script>
-    let detections = @Html.Raw(Json.Serialize(Model.Detections));
-    let maleCount = detections.filter(d => d.gender === 'male').length;
-    let femaleCount = detections.filter(d => d.gender === 'female').length;
+    let genderChart, sentimentChart;
+    let genderData = { male: 0, female: 0 };
+    let sentimentData = { neutral: 0, happy: 0, sad: 0, angry: 0, fearful: 0, disgusted: 0, surprised: 0 };
 
-    // Iniciar gráfico
-    const ctx = document.getElementById('genderChart').getContext('2d');
-    const genderChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Homem', 'Mulher'],
-            datasets: [{
-                data: [maleCount, femaleCount],
-                backgroundColor: ['#36A2EB', '#FF6384'],
-            }]
+    async function loadChartData() {
+        const response = await fetch('/api/detections/chart');
+        const data = await response.json();
+
+        // Atualiza a contagem de gêneros
+        genderData.male = data.filter(d => d.gender === 'male').length;
+        genderData.female = data.filter(d => d.gender === 'female').length;
+
+        // Atualiza a contagem das expressões faciais
+        sentimentData.neutral = data.filter(d => d.mainExpression === 'neutral').length;
+        sentimentData.happy = data.filter(d => d.mainExpression === 'happy').length;
+        sentimentData.sad = data.filter(d => d.mainExpression === 'sad').length;
+        sentimentData.angry = data.filter(d => d.mainExpression === 'angry').length;
+        sentimentData.fearful = data.filter(d => d.mainExpression === 'fearful').length;
+        sentimentData.disgusted = data.filter(d => d.mainExpression === 'disgusted').length;
+        sentimentData.surprised = data.filter(d => d.mainExpression === 'surprised').length;
+
+        updateGenderChart();
+        updateSentimentChart();
+    }
+
+    function updateGenderChart() {
+        const genderCtx = document.getElementById('genderChart').getContext('2d');
+        if (!genderChart) {
+            genderChart = new Chart(genderCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Homem', 'Mulher'],
+                    datasets: [{
+                        data: [genderData.male, genderData.female],
+                        backgroundColor: ['#36A2EB', '#FF6384'],
+                        borderWidth: 1
+                    }]
+                }
+            });
+        } else {
+            genderChart.data.datasets[0].data = [genderData.male, genderData.female];
+            genderChart.update();
         }
-    });
+    }
 
-    function addDetectionToTable(gender, age, imageBase64, mainExpression) {
+    function updateSentimentChart() {
+        const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
+        if (!sentimentChart) {
+            sentimentChart = new Chart(sentimentCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Neutro', 'Feliz', 'Triste', 'Bravo', 'Assustado', 'Nojo', 'Surpreso'],
+                    datasets: [{
+                        label: 'Sentimentos Detectados',
+                        data: [sentimentData.neutral, sentimentData.happy, sentimentData.sad, sentimentData.angry, sentimentData.fearful, sentimentData.disgusted, sentimentData.surprised],
+                        backgroundColor: [
+                            '#FFCE56', '#36A2EB', '#FF6384', '#FF9F40', '#4BC0C0', '#9966FF', '#FFCD56'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        } else {
+            sentimentChart.data.datasets[0].data = [
+                sentimentData.neutral, sentimentData.happy, sentimentData.sad,
+                sentimentData.angry, sentimentData.fearful, sentimentData.disgusted, sentimentData.surprised
+            ];
+            sentimentChart.update();
+        }
+    }
+
+    // Função para adicionar detecção à tabela
+    function addDetectionToTable(gender, age, imageBase64, expression) {
         const table = document.getElementById('detectionTable').getElementsByTagName('tbody')[0];
+        const newRow = table.insertRow(0); // Adiciona nova linha no topo
 
-        const newRow = table.insertRow(0);  // Adiciona nova linha no topo
         const genderCell = newRow.insertCell(0);
         const ageCell = newRow.insertCell(1);
         const expressionCell = newRow.insertCell(2);
         const imageCell = newRow.insertCell(3);
 
-        // Converter o gênero de 'male' para 'Homem' e 'female' para 'Mulher'
         genderCell.textContent = (gender === 'male') ? 'Homem' : 'Mulher';
-
-        // Adicionar a idade
         ageCell.textContent = age;
 
-        // Converter a expressão facial de inglês para português
-        const translatedExpression = translateExpression(mainExpression);
-        expressionCell.textContent = translatedExpression;
+        switch (expression) {
+            case 'neutral': expressionCell.textContent = 'Neutro'; break;
+            case 'happy': expressionCell.textContent = 'Feliz'; break;
+            case 'sad': expressionCell.textContent = 'Triste'; break;
+            case 'angry': expressionCell.textContent = 'Bravo'; break;
+            case 'fearful': expressionCell.textContent = 'Assustado'; break;
+            case 'disgusted': expressionCell.textContent = 'Nojo'; break;
+            case 'surprised': expressionCell.textContent = 'Surpreso'; break;
+            default: expressionCell.textContent = 'Desconhecido';
+        }
 
-        // Adicionar a imagem
+        console.log(imageBase64)
+
         imageCell.innerHTML = `<img src="${imageBase64}" width="100" height="100" class="rounded" />`;
 
         // Limitar a tabela a 5 registros
         if (table.rows.length > 5) {
-            table.deleteRow(5);  // Remove a última linha
+            table.deleteRow(5); // Remove a última linha
         }
     }
 
-    // Função para converter a expressão do inglês para o português
-    function translateExpression(expression) {
-        const translations = {
-            neutral: 'Neutro',
-            happy: 'Feliz',
-            sad: 'Triste',
-            angry: 'Bravo',
-            fearful: 'Assustado',
-            disgusted: 'Nojo',
-            surprised: 'Surpreso'
-        };
-
-        return translations[expression] || expression;  // Retorna a tradução ou a própria expressão caso não haja correspondência
-    }
-
-    // Atualizar gráfico
-    function updateGenderChart(gender) {
-        if (gender === 'male') {
-            maleCount++;
-        } else {
-            femaleCount++;
-        }
-        genderChart.data.datasets[0].data = [maleCount, femaleCount];
-        genderChart.update();
-    }
-
-    // Conectar ao SignalR
+    // Conectar ao SignalR para atualizações em tempo real
     const connection = new signalR.HubConnectionBuilder()
         .withUrl("/detectionHub")
         .build();
 
-    connection.on("ReceiveDetectionUpdate", (gender, age, imageBase64, mainExpression) => {
-        console.log(mainExpression);
-        // Adicionar a detecção à tabela com a expressão facial
-        addDetectionToTable(gender, age, imageBase64, mainExpression);
-
-        // Atualizar o gráfico de gênero
-        updateGenderChart(gender);
+    connection.on("ReceiveDetectionUpdate", (gender, age, imageBase64, expression) => {
+        addDetectionToTable(gender, age, imageBase64, expression);
+        loadChartData(); // Recarrega os gráficos com a nova detecção
     });
 
-
     connection.start().catch(err => console.error(err.toString()));
+
+    // Carregar dados e gráficos na inicialização
+    loadChartData();
 </script>

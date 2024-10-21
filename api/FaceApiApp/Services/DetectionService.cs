@@ -17,8 +17,8 @@ public class DetectionService
     {
         return await _detections
             .Find(detection => true)
-            .SortByDescending(d => d.Date)  // Ordena por data em ordem decrescente
-            .Limit(3)                        // Limita para retornar apenas 3 resultados
+            .SortByDescending(d => d.Date) 
+            .Limit(5)   
             .ToListAsync();
     }
 

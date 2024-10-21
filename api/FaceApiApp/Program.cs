@@ -1,4 +1,5 @@
 using FaceApiApp;
+using FaceApiApp.Hubs;
 using FaceApiApp.Pages;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddSingleton<DetectionService>();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+builder.Services.AddSignalR();
 builder.Services.AddHttpClient("ApiClient", client =>
 {
     client.BaseAddress = new Uri("http://localhost:5211/"); // Ajuste para seu endere�o local
@@ -34,5 +36,7 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
+
+app.MapHub<DetectionHub>("/detectionHub");
 
 app.Run();

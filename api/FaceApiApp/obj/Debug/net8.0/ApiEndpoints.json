@@ -1,7 +1,23 @@
 [
   {
     "ContainingType": "FaceApiApp.Controllers.DetectionsController",
-    "Method": "Get",
+    "Method": "CreateDetection",
+    "RelativePath": "api/Detections",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "detection",
+        "Type": "FaceApiApp.Detection",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FaceApiApp.Controllers.DetectionsController",
+    "Method": "GetDetections",
     "RelativePath": "api/Detections",
     "HttpMethod": "GET",
     "IsController": true,

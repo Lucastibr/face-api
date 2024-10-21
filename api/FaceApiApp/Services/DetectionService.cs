@@ -15,8 +15,13 @@ public class DetectionService
 
     public async Task<List<Detection>> GetDetectionsAsync()
     {
-        return await _detections.Find(detection => true).ToListAsync();
+        return await _detections
+            .Find(detection => true)
+            .SortByDescending(d => d.Date)  // Ordena por data em ordem decrescente
+            .Limit(3)                        // Limita para retornar apenas 3 resultados
+            .ToListAsync();
     }
+
 
     public async Task CreateDetectionAsync(Detection detection)
     {

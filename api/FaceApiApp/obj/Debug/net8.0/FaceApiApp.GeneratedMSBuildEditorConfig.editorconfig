@@ -9,43 +9,43 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = FaceApiApp
 build_property.RootNamespace = FaceApiApp
-build_property.ProjectDir = C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp\
+build_property.ProjectDir = C:\Users\Lucas\Desktop\face-api\face-api\api\FaceApiApp\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = true
-build_property.MSBuildProjectDirectory = C:\Users\lukka\OneDrive\Área de Trabalho\face-api\api\FaceApiApp
+build_property.MSBuildProjectDirectory = C:\Users\Lucas\Desktop\face-api\face-api\api\FaceApiApp
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/lukka/OneDrive/Área de Trabalho/face-api/api/FaceApiApp/Pages/Capture.cshtml]
+[C:/Users/Lucas/Desktop/face-api/face-api/api/FaceApiApp/Pages/Capture.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2FwdHVyZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lukka/OneDrive/Área de Trabalho/face-api/api/FaceApiApp/Pages/Error.cshtml]
+[C:/Users/Lucas/Desktop/face-api/face-api/api/FaceApiApp/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lukka/OneDrive/Área de Trabalho/face-api/api/FaceApiApp/Pages/Index.cshtml]
+[C:/Users/Lucas/Desktop/face-api/face-api/api/FaceApiApp/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lukka/OneDrive/Área de Trabalho/face-api/api/FaceApiApp/Pages/Privacy.cshtml]
+[C:/Users/Lucas/Desktop/face-api/face-api/api/FaceApiApp/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lukka/OneDrive/Área de Trabalho/face-api/api/FaceApiApp/Pages/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Lucas/Desktop/face-api/face-api/api/FaceApiApp/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lukka/OneDrive/Área de Trabalho/face-api/api/FaceApiApp/Pages/_ViewImports.cshtml]
+[C:/Users/Lucas/Desktop/face-api/face-api/api/FaceApiApp/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lukka/OneDrive/Área de Trabalho/face-api/api/FaceApiApp/Pages/_ViewStart.cshtml]
+[C:/Users/Lucas/Desktop/face-api/face-api/api/FaceApiApp/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/lukka/OneDrive/Área de Trabalho/face-api/api/FaceApiApp/Pages/Shared/_Layout.cshtml]
+[C:/Users/Lucas/Desktop/face-api/face-api/api/FaceApiApp/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-blx3mjki05

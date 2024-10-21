@@ -2,34 +2,54 @@
 @model IndexModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-<h2>Detecções Faciais</h2>
+<div class="container mt-4">
+    <h2>Detecções Faciais - Inovatec 2024</h2>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Id</th>
-        <th>Gênero</th>
-        <th>Idade</th>
-        <th>Imagem</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var detection in Model.Detections)
-    {
-        <tr>
-            <td>@detection.Id</td>
-            <td>@detection.Gender</td>
-            <td>@detection.Age</td>
-            <td>
-                <img src="@detection.ImageBase64" alt="Imagem de Detecção" width="100" height="100" />
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+    <div class="row">
+        <!-- Coluna para a tabela -->
+        <div class="col-md-6">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Gênero</th>
+                        <th>Idade</th>
+                        <th>Imagem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var detection in Model.Detections)
+                    {
+                        <tr>
+                            <td>
+                                @switch (detection.Gender)
+                                {
+                                    case "male":
+                                        <span>Homem</span>
+                                        break;
+                                    case "female":
+                                        <span>Mulher</span>
+                                        break;
+                                }
+                            </td>
+                            <td>@detection.Age</td>
+                            <td>
+                                <img src="@detection.ImageBase64" alt="Imagem de Detecção" width="100" height="100" class="rounded" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
 
-<canvas id="genderChart" width="400" height="200"></canvas>
+        <!-- Coluna para o gráfico -->
+        <div class="col-md-6">
+            <h4>Distribuição de Gêneros</h4>
+            <canvas id="genderChart" width="100" height="100"></canvas>
+        </div>
+    </div>
+</div>
 
+<!-- Inclusão do Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     async function loadChartData() {

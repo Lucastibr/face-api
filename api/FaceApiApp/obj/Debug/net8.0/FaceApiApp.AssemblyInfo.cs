@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FaceApiApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0d2140349ec30352b5aff480e27e2f8aef34f56b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d9149078b4b3f5b80e8acdee0f3b0af070c196e7")]
 [assembly: System.Reflection.AssemblyProductAttribute("FaceApiApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FaceApiApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
